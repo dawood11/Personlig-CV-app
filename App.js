@@ -10,11 +10,11 @@ import Subjects from './src/components/Education/Subjects/Subjects';
 import * as firebase from 'firebase';
 
 firebase.initializeApp({
-  apiKey: "AIzaSyBCecp-v6LgXCPf9IrOUyPUYAPyGaImAb0",
-  authDomain: "helloworld-7103b.firebaseapp.com",
-  databaseURL: "https://helloworld-7103b.firebaseio.com",
-  projectId: "helloworld-7103b",
-  storageBucket: "helloworld-7103b.appspot.com",
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
 });
 
 export default class App extends React.Component {
