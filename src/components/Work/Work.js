@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { StyleSheet, Image, Dimensions, Text, View } from 'react-native';
+import { textColor, skyBlueBackground } from '../../../Styling';
 import ProgressBar from '.././ProgressBar/ProgressBar';
 
 
@@ -25,7 +26,7 @@ export default class Work extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'skyblue',
+    backgroundColor: skyBlueBackground,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -36,6 +37,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   EducationSubTitle: {
-    color: 'white'
+    color: textColor
   }
 });

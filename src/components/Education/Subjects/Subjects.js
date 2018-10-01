@@ -1,37 +1,38 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { textColor, skyBlueBackground } from '../../../../Styling';
 import * as firebase from 'firebase';
 
-var subjectsDB = []
-
-export default class Subject extends Component {
-  database = firebase.database().ref(this.props.navigation.state.params.study).on('value', this.gotData, this.errData)
-  
+export default class Subject extends Component {  
   constructor(props){
     super(props)
+
+    this.onSubjectsFound = this.onSubjectsFound.bind(this);
+    this.onSubjectsNotFound = this.onSubjectsNotFound.bind(this);
+
     this.state = {
       subjectsList: '',
-      loaded: false
+      errorMsg: ''
    }
-   setTimeout(() => this.setState({loaded: true}), 2000);   
   }
-  firebaseConfig = {
-    apiKey: "AIzaSyBCecp-v6LgXCPf9IrOUyPUYAPyGaImAb0",
-    authDomain: "helloworld-7103b.firebaseapp.com",
-    databaseURL: "https://helloworld-7103b.firebaseio.com",
-    projectId: "helloworld-7103b",
-    storageBucket: "helloworld-7103b.appspot.com",
-  };
-  
-  //database = firebase.database().ref('Bachelor').on('value', this.gotData, this.errData)
-  
-  gotData(data) {
-    subjectsDB = data.val();
-    console.log(subjectsDB)
+
+  componentDidMount() {
+    const studyType = this.props.navigation.state.params.study
+    firebase.database().ref(studyType).on('value', this.onSubjectsFound, this.onSubjectsNotFound);
   }
-  errData(err) {
+
+
+  componentWillUnmount() {
+    firebase.database().ref(studyType).off();
+  }
+
+  onSubjectsFound(data) {
+    this.setState({subjectsList: data.val()})
+  }
+  onSubjectsNotFound(err) {
     console.log('ERROR');
     console.log(err);
+    this.setState({errorMsg: err})
   }
 
   static navigationOptions = {
@@ -39,11 +40,9 @@ export default class Subject extends Component {
   }
 
   render() {
-    setTimeout(() => this.setState({subjectsList : subjectsDB}), 1000);
-
     return (
       <View style={styles.container}>
-        {this.state.loaded ? <FlatList
+        {this.state.subjectsList != '' ? <FlatList
           data = {this.state.subjectsList}
           renderItem = {
             ({item}) =>
@@ -52,7 +51,7 @@ export default class Subject extends Component {
                 <Text style={styles.courseName}> - {`${item.courseName}`}</Text>
               </View>
           }
-        /> : <Text style={{color: 'white'}}>Loading...</Text>}
+        /> : <Text style={{color: textColor}}>Loading...</Text>}
       </View>
     );
   }
@@ -61,17 +60,19 @@ export default class Subject extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'skyblue',
+    backgroundColor: skyBlueBackground,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   courseContainer:{
     flexDirection: 'row',
     paddingBottom: 5
   },
   courseID:{
-    color: 'white',
+    color: textColor,
     fontWeight: 'bold',
   },
   courseName:{
-    color: 'white',
+    color: textColor
   },
 });

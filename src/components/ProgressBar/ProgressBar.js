@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import { backgroundColorSsecondary } from '../../../Styling';
 
 let windowSize = Dimensions.get('window').width/2;
 
@@ -25,13 +26,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   progressBar: {
-    backgroundColor: '#FFF',
+    backgroundColor: 'white',
     borderRadius: windowSize/2,
     paddingHorizontal: windowSize-10,
     paddingVertical: 5,
   },
   complete: {
-    backgroundColor: 'steelblue',
+    backgroundColor: backgroundColorSsecondary,
     borderRadius: windowSize/2,
     paddingVertical: 5,
     position: 'absolute',

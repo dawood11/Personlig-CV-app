@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Image, Dimensions, Text, View } from 'react-native';
+import { textColor, borderColor, backgroundColorSsecondary } from '../../../Styling';
 
 let iProfilePictureSize = Dimensions.get('window').width/2;
 
-
-export default class ProfilePicture extends Component {
+export default class ProfilePicture extends Component {  
   render() {
     return (
       <View style={styles.container}>
@@ -24,16 +24,15 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'steelblue',
-    borderBottomColor: 'black',
-    borderBottomWidth: 5,
+    backgroundColor: backgroundColorSsecondary,
+    paddingBottom: 5
   },
   ProfilePicture: {
     width: iProfilePictureSize,
     height: iProfilePictureSize,
     borderRadius: iProfilePictureSize/2,
     borderWidth: 2,
-    borderColor: 'skyblue',
+    borderColor: borderColor,
   },
   labelContainer:{
     paddingTop: 10,
@@ -42,11 +41,11 @@ const styles = StyleSheet.create({
   },
   name:{
     fontSize: 20,
-    color: 'white',
+    color: textColor,
     fontWeight: 'bold',
   },
   jobTitle:{
     fontSize: 15,
-    color: 'white',
+    color: textColor,
   }
 });

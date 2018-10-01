@@ -1,30 +1,41 @@
 import React, {Component} from 'react';
-import { StyleSheet, Image, Dimensions, Text, View, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, FlatList, BackHandler } from 'react-native';
+import { textColor, skyBlueBackground } from '../../../Styling';
 import ProgressBar from '.././ProgressBar/ProgressBar';
-import Subjects from './Subjects/Subjects';
 import * as firebase from 'firebase';
 
-var educationDB = []
-let iProfilePictureSize = Dimensions.get('window').width/3;
-
 export default class Education extends Component {
-  database = firebase.database().ref('Education').on('value', this.gotData, this.errData)  
-  state = {
-    educationList: '',
-    loaded: false
-  }
   constructor(props){
     super(props)
-    setTimeout(() => this.setState({loaded: true}), 2000);
+
+    this.onEducationFound = this.onEducationFound.bind(this);
+    this.onEducationNotFound = this.onEducationNotFound.bind(this);
+
+    this.state = {
+      educationList: '',
+      errorMsg: ''
+    }
   }
 
-  gotData(data) {
-    educationDB = data.val();
-    console.log(educationDB)
+  componentDidMount() {
+    firebase.database().ref('Education').on('value', this.onEducationFound, this.onEducationNotFound);
+    BackHandler.addEventListener('hardwareBackPress', function () {
+      console.log('hhhh')
+      return true;
+    })
   }
-  errData(err) {
+
+  componentWillUnmount() {
+    firebase.database().ref('Education').off();
+  }
+
+  onEducationFound(data) {
+    this.setState({educationList: data.val()})
+  }
+  onEducationNotFound(err) {
     console.log('ERROR');
     console.log(err);
+    this.setState({errorMsg: err})
   }
 
   static navigationOptions = {
@@ -33,11 +44,9 @@ export default class Education extends Component {
   
   render() {
     const { navigate } = this.props.navigation;
-    setTimeout(() => this.setState({educationList : educationDB}), 1000);
-     
     return (
       <View style={styles.container}>
-        {this.state.loaded ?  <FlatList
+        {this.state.educationList != '' ?  <FlatList
           data = {this.state.educationList}
           renderItem = {
             ({item}) =>
@@ -52,8 +61,8 @@ export default class Education extends Component {
                 <ProgressBar progress={item.complete}/>
               </View>
           }
-        /> : <Text style={{color: 'white'}}>Loading...</Text>}
-    </View>
+        /> : <Text style={{color: textColor}}>Loading...</Text>}
+      </View>
     );
   }
 }
@@ -63,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'skyblue'
+    backgroundColor: skyBlueBackground
   },
   subContainer: {
     paddingTop: 5,
@@ -72,7 +81,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,   
   },
   EducationSubTitle: {
-    color: 'white'
+    color: textColor
   },
   EducationTitleContainer: {
     flexDirection: 'row',
